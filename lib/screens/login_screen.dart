@@ -11,7 +11,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _sembunyikanPassword = true;
-  String? _pesanError;
 
   @override
   void dispose() {
@@ -21,31 +20,21 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _prosesLogin() {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        _pesanError = 'Email dan Password wajib diisi!';
-      });
+    if (_emailController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Validasi gagal: Email dan Password tidak boleh kosong.'),
+          content: Text('Email dan Password tidak boleh kosong!'),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    setState(() {
-      _pesanError = null;
-    });
-
-    // Pindah ke Dashboard tanpa bisa kembali (pushReplacementNamed) & kirim data
     Navigator.pushReplacementNamed(
       context,
       '/dashboard',
-      arguments: email,
+      arguments: _emailController.text.trim(),
     );
   }
 
@@ -146,16 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              if (_pesanError != null) ...[
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    _pesanError!,
-                    style: const TextStyle(color: Colors.red, fontSize: 12),
-                  ),
-                ),
-              ],
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerRight,

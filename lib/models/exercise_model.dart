@@ -4,7 +4,7 @@ class ExerciseModel {
   String level;
   String kategori;
   double progress;
-  List<String> ototDilatih; // List bersarang di dalam objek
+  List<String> ototDilatih;
 
   ExerciseModel({
     required this.nama,
@@ -16,7 +16,6 @@ class ExerciseModel {
   });
 }
 
-// 1. STRUKTUR DATA LINEAR (List objek model)
 List<ExerciseModel> daftarLatihan = [
   ExerciseModel(
     nama: 'Push Up',
@@ -30,7 +29,7 @@ List<ExerciseModel> daftarLatihan = [
     nama: 'Pull Up',
     durasi: '10 Menit',
     level: 'Menengah',
-    kategori: 'STRENGTH',
+    kategori: 'KEKUATAN',
     progress: 0.45,
     ototDilatih: ['Punggung', 'Bisep', 'Bahu'],
   ),
@@ -46,7 +45,7 @@ List<ExerciseModel> daftarLatihan = [
     nama: 'Squat Jump',
     durasi: '15 Menit',
     level: 'Menengah',
-    kategori: 'STRENGTH',
+    kategori: 'KEKUATAN',
     progress: 0.2,
     ototDilatih: ['Paha Depan', 'Betis', 'Glutes'],
   ),
@@ -67,17 +66,3 @@ List<ExerciseModel> daftarLatihan = [
     ototDilatih: ['Betis', 'Bahu', 'Jantung'],
   ),
 ];
-
-// 2. STRUKTUR DATA NON-LINEAR (Map mengelompokkan latihan per kategori)
-Map<String, List<ExerciseModel>> kelompokkanPerKategori(
-    List<ExerciseModel> list,
-    ) {
-  Map<String, List<ExerciseModel>> hasil = {};
-  for (var item in list) {
-    if (!hasil.containsKey(item.kategori)) {
-      hasil[item.kategori] = [];
-    }
-    hasil[item.kategori]!.add(item);
-  }
-  return hasil;
-}

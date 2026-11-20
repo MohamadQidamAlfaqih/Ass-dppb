@@ -10,37 +10,10 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   bool _isWeekly = true;
 
-  void _konfirmasiLogout() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Logout'),
-        content: const Text('Apakah Anda yakin ingin keluar dari akun ini?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final String namaUser =
-        (ModalRoute.of(context)?.settings.arguments as String?) ?? 'Mahasiswa';
+        (ModalRoute.of(context)?.settings.arguments as String?) ?? 'User';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -49,8 +22,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.logout, color: Color(0xFF166534)),
-          onPressed: _konfirmasiLogout,
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF166534)),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/login');
+          },
         ),
         title: const Text(
           'HIDUP SEHAT',

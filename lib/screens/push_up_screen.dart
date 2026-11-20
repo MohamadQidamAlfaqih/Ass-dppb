@@ -184,12 +184,11 @@ class PushUpScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Mengirim data 'true' kembali ke ExerciseScreen
                   Navigator.pop(context, true);
                 },
                 icon: const Icon(Icons.bolt, size: 20),
                 label: const Text(
-                  'SELESAIKAN LATIHAN',
+                  'MULAI LATIHAN',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(

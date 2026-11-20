@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'screens/detail_exercise_screen.dart';
-
+import 'screens/login_screen.dart';
+import 'screens/dashboard_screen.dart';
+import 'screens/exercise_screen.dart';
+import 'screens/push_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,18 +17,15 @@ class MyApp extends StatelessWidget {
       title: 'Hidup Sehat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0B6E4F)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF16A34A)),
         useMaterial3: true,
       ),
-      // Sementara langsung buka halaman Push Up (/detail) agar bisa langsung dites
-      initialRoute: '/detail',
+      initialRoute: '/login',
       routes: {
-        '/detail': (context) => const DetailExerciseScreen(),
-        // Rute halaman temanmu nanti tinggal diaktifkan di sini:
-        // '/login': (context) => const LoginScreen(),
-        // '/dashboard': (context) => const DashboardScreen(),
-        // '/exercise': (context) => const ExerciseScreen(),
-        // '/tambah': (context) => const TambahExerciseScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/exercise': (context) => const ExerciseScreen(),
+        '/push_up': (context) => const PushUpScreen(),
       },
     );
   }

@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
-import '../models/exercise.dart';
+import '../models/exercise_model.dart';
 
-class DetailExerciseScreen extends StatelessWidget {
-  const DetailExerciseScreen({super.key});
+class PushUpScreen extends StatelessWidget {
+  const PushUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Menerima data dari halaman Exercise (kalau null, otomatis pakai data Push Up)
-    final Exercise? args =
-    ModalRoute.of(context)?.settings.arguments as Exercise?;
+    final ExerciseModel? args =
+    ModalRoute.of(context)?.settings.arguments as ExerciseModel?;
 
     final String namaGerakan = args?.nama ?? 'Push Up';
     final String kategori = args?.kategori ?? 'STRENGTH';
+    final String levelKesulitan = args?.level ?? 'Menengah';
+    final List<String> daftarOtot =
+        args?.ototDilatih ?? ['Dada', 'Bahu', 'Trisep'];
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // AppBar sesuai desain: tombol back, judul HIDUP SEHAT di tengah, ikon lonceng
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacementNamed(context, '/exercise');
+            }
+          },
         ),
         title: const Text(
           'HIDUP SEHAT',
@@ -43,14 +50,11 @@ class DetailExerciseScreen extends StatelessWidget {
           ),
         ],
       ),
-
-      // SingleChildScrollView mencegah error overflow saat layar diputar landscape
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Judul Gerakan (Push Up)
             Text(
               namaGerakan,
               style: const TextStyle(
@@ -60,18 +64,14 @@ class DetailExerciseScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-
-            // 2. Dua Badge Kategori (Hijau & Oranye)
             Row(
               children: [
-                _buatBadge(kategori.toUpperCase(), const Color(0xFF00B862)),
+                _buatBadge(kategori, const Color(0xFF00B862)),
                 const SizedBox(width: 8),
                 _buatBadge('BODYWEIGHT', const Color(0xFFFF6D00)),
               ],
             ),
             const SizedBox(height: 16),
-
-            // 3. Banner Preview Gerakan menggunakan Stack (Kotak Gambar + Tombol Play)
             Stack(
               alignment: Alignment.center,
               children: [
@@ -82,18 +82,14 @@ class DetailExerciseScreen extends StatelessWidget {
                     color: const Color(0xFF1E293B),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.fitness_center,
-                        size: 64,
-                        color: Colors.white24,
-                      ),
-                    ],
+                  child: const Center(
+                    child: Icon(
+                      Icons.fitness_center,
+                      size: 64,
+                      color: Colors.white24,
+                    ),
                   ),
                 ),
-                // Tombol Play bulat transparan di tengah Stack
                 GestureDetector(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -104,8 +100,8 @@ class DetailExerciseScreen extends StatelessWidget {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
+                    decoration: const BoxDecoration(
+                      color: Colors.white30,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -118,37 +114,37 @@ class DetailExerciseScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-
-            // 4. Bagian "OTOT YANG DILATIH" (3 Kotak Hijau Muda sejajar pakai Row & Expanded)
             const Text(
               'OTOT YANG DILATIH',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
-                letterSpacing: 0.5,
               ),
             ),
             const SizedBox(height: 10),
             Row(
-              children: [
-                Expanded(child: _buatKartuOtot('Dada', 'Primary')),
-                const SizedBox(width: 10),
-                Expanded(child: _buatKartuOtot('Bahu', 'Secondary')),
-                const SizedBox(width: 10),
-                Expanded(child: _buatKartuOtot('Trisep', 'Secondary')),
-              ],
+              children: List.generate(daftarOtot.length, (i) {
+                return Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: i < daftarOtot.length - 1 ? 10 : 0,
+                    ),
+                    child: _buatKartuOtot(
+                      daftarOtot[i],
+                      i == 0 ? 'Primary' : 'Secondary',
+                    ),
+                  ),
+                );
+              }),
             ),
             const SizedBox(height: 24),
-
-            // 5. Bagian "INSTRUKSI LANGKAH-DEMI-LANGKAH" (3 Kartu Warna Pastel)
             const Text(
               'INSTRUKSI LANGKAH-DEMI-LANGKAH',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
-                letterSpacing: 0.5,
               ),
             ),
             const SizedBox(height: 10),
@@ -157,7 +153,7 @@ class DetailExerciseScreen extends StatelessWidget {
               judul: 'Posisi Awal',
               deskripsi:
               'Mulailah dengan posisi plank, tangan diletakkan sedikit lebih lebar dari lebar bahu.',
-              warnaLatar: const Color(0xFFFBE9E0), // Krem / Peach lembut
+              warnaLatar: const Color(0xFFFBE9E0),
             ),
             const SizedBox(height: 10),
             _buatKartuLangkah(
@@ -165,7 +161,7 @@ class DetailExerciseScreen extends StatelessWidget {
               judul: 'Turunkan Tubuh',
               deskripsi:
               'Turunkan tubuh Anda sampai dada hampir menyentuh lantai sambil menjaga punggung tetap lurus.',
-              warnaLatar: const Color(0xFFFCE4EC), // Pink lembut
+              warnaLatar: const Color(0xFFFCE4EC),
             ),
             const SizedBox(height: 10),
             _buatKartuLangkah(
@@ -173,40 +169,28 @@ class DetailExerciseScreen extends StatelessWidget {
               judul: 'Dorong Ke Atas',
               deskripsi:
               'Hembuskan napas saat Anda mendorong tubuh kembali ke posisi awal dengan tangan Anda.',
-              warnaLatar: const Color(0xFFE3F2FD), // Biru lembut
+              warnaLatar: const Color(0xFFE3F2FD),
             ),
             const SizedBox(height: 20),
-
-            // 6. Bagian Kesulitan & Peralatan (2 Kotak Hijau Muda sejajar)
             Row(
               children: [
-                Expanded(child: _buatKartuInfo('KESULITAN', 'Menengah')),
+                Expanded(child: _buatKartuInfo('KESULITAN', levelKesulitan)),
                 const SizedBox(width: 12),
                 Expanded(child: _buatKartuInfo('PERALATAN', 'Tanpa Alat')),
               ],
             ),
             const SizedBox(height: 24),
-
-            // 7. Tombol Utama "MULAI LATIHAN"
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Latihan $namaGerakan dimulai! Semangat!'),
-                      backgroundColor: const Color(0xFF0B6E4F),
-                    ),
-                  );
+                  // Mengirim data 'true' kembali ke ExerciseScreen
+                  Navigator.pop(context, true);
                 },
                 icon: const Icon(Icons.bolt, size: 20),
                 label: const Text(
-                  'MULAI LATIHAN',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                  ),
+                  'SELESAIKAN LATIHAN',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF0B6E4F),
@@ -221,10 +205,10 @@ class DetailExerciseScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: _buatBottomNav(context),
     );
   }
 
-  // Fungsi pembantu sederhana di dalam file yang sama agar kode tidak berulang
   Widget _buatBadge(String teks, Color warna) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -263,10 +247,7 @@ class DetailExerciseScreen extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             peran,
-            style: const TextStyle(
-              fontSize: 11,
-              color: Color(0xFF15803D),
-            ),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF15803D)),
           ),
         ],
       ),
@@ -355,6 +336,77 @@ class DetailExerciseScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buatBottomNav(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7F8F5),
+        border: Border(top: BorderSide(color: Colors.grey.shade300)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _itemNav(Icons.grid_view_rounded, 'Dashboard', false, () {
+            Navigator.pushReplacementNamed(context, '/dashboard');
+          }),
+          _itemNav(Icons.fitness_center, 'Exercise', true, () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacementNamed(context, '/exercise');
+            }
+          }),
+          _itemNav(Icons.cloud_outlined, 'Weather', false, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Menu Weather')),
+            );
+          }),
+          _itemNav(Icons.calendar_today_outlined, 'Schedule', false, () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Menu Schedule')),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemNav(
+      IconData ikon,
+      String label,
+      bool aktif,
+      VoidCallback onTap,
+      ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: aktif ? const Color(0xFFB7F0C0) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              ikon,
+              size: 20,
+              color: aktif ? const Color(0xFF15803D) : Colors.grey.shade600,
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: aktif ? FontWeight.bold : FontWeight.normal,
+                color: aktif ? const Color(0xFF15803D) : Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

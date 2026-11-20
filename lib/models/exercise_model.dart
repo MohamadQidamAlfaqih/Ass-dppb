@@ -1,68 +1,83 @@
 class ExerciseModel {
-  final String id;
-  String title;
-  int durationMinutes;
+  String nama;
+  String durasi;
   String level;
-  String category;
+  String kategori;
   double progress;
-  bool isCompleted;
+  List<String> ototDilatih; // List bersarang di dalam objek
 
   ExerciseModel({
-    required this.id,
-    required this.title,
-    required this.durationMinutes,
+    required this.nama,
+    required this.durasi,
     required this.level,
-    required this.category,
-    this.progress = 0.0,
-    this.isCompleted = false,
+    required this.kategori,
+    required this.progress,
+    required this.ototDilatih,
   });
 }
 
-// Daftar latihan bagianmu (tanpa Push Up)
-final List<ExerciseModel> initialExerciseList = [
+// 1. STRUKTUR DATA LINEAR (List objek model)
+List<ExerciseModel> daftarLatihan = [
   ExerciseModel(
-    id: 'ex1',
-    title: 'Pull Up',
-    durationMinutes: 10,
-    level: 'Ahli',
-    category: 'Kekuatan',
-    progress: 0.25,
-    isCompleted: false,
-  ),
-  ExerciseModel(
-    id: 'ex2',
-    title: 'Sit Up',
-    durationMinutes: 12,
-    level: 'Pemula',
-    category: 'Inti',
-    progress: 0.65,
-    isCompleted: true,
-  ),
-  ExerciseModel(
-    id: 'ex3',
-    title: 'Squat Dumble',
-    durationMinutes: 20,
+    nama: 'Push Up',
+    durasi: '15 Menit',
     level: 'Menengah',
-    category: 'Kekuatan',
+    kategori: 'STRENGTH',
+    progress: 1.0,
+    ototDilatih: ['Dada', 'Bahu', 'Trisep'],
+  ),
+  ExerciseModel(
+    nama: 'Pull Up',
+    durasi: '10 Menit',
+    level: 'Menengah',
+    kategori: 'STRENGTH',
     progress: 0.45,
-    isCompleted: false,
+    ototDilatih: ['Punggung', 'Bisep', 'Bahu'],
   ),
   ExerciseModel(
-    id: 'ex4',
-    title: 'Plank Siku',
-    durationMinutes: 5,
+    nama: 'Sit Up',
+    durasi: '12 Menit',
     level: 'Pemula',
-    category: 'Inti',
+    kategori: 'INTI',
     progress: 1.0,
-    isCompleted: true,
+    ototDilatih: ['Perut Atas', 'Perut Bawah', 'Pinggul'],
   ),
   ExerciseModel(
-    id: 'ex5',
-    title: 'Jumping Jack',
-    durationMinutes: 15,
+    nama: 'Squat Jump',
+    durasi: '15 Menit',
     level: 'Menengah',
-    category: 'Kardio',
+    kategori: 'STRENGTH',
+    progress: 0.2,
+    ototDilatih: ['Paha Depan', 'Betis', 'Glutes'],
+  ),
+  ExerciseModel(
+    nama: 'Plank Hold',
+    durasi: '5 Menit',
+    level: 'Pemula',
+    kategori: 'INTI',
     progress: 1.0,
-    isCompleted: true,
+    ototDilatih: ['Core', 'Punggung Bawah', 'Bahu'],
+  ),
+  ExerciseModel(
+    nama: 'Jumping Jack',
+    durasi: '10 Menit',
+    level: 'Pemula',
+    kategori: 'KARDIO',
+    progress: 1.0,
+    ototDilatih: ['Betis', 'Bahu', 'Jantung'],
   ),
 ];
+
+// 2. STRUKTUR DATA NON-LINEAR (Map mengelompokkan latihan per kategori)
+Map<String, List<ExerciseModel>> kelompokkanPerKategori(
+    List<ExerciseModel> list,
+    ) {
+  Map<String, List<ExerciseModel>> hasil = {};
+  for (var item in list) {
+    if (!hasil.containsKey(item.kategori)) {
+      hasil[item.kategori] = [];
+    }
+    hasil[item.kategori]!.add(item);
+  }
+  return hasil;
+}
